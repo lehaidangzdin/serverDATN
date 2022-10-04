@@ -2,8 +2,7 @@ const UserModel = require("../models/db_config").user;
 const randomString = require("randomstring");
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
 const response = require("../helper/response");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const bcrypt1 = require("bcrypt");
 const jwtHelper = require("../helper/jwt.helper");
 
 class AuthController {
@@ -21,7 +20,7 @@ class AuthController {
       if (data.length === 0) {
         return response.ErrorResponse(res, "Ten dang nhap khong ton tai!");
       }
-      const isPasswordValid = await bcrypt.compare(password, data[0].password);
+      const isPasswordValid = await bcrypt1.compare(password, data[0].password);
 
       if (!isPasswordValid) {
         return response.ErrorResponse(res, "Mat khau k chinh xac!");
@@ -58,9 +57,9 @@ class AuthController {
   async register(req, res) {
     try {
       // if (req.body != null) return response.ErrorResponse(res, "not null field")
-      const salt1 = await bcrypt.genSalt(12);
+      const salt1 = await bcrypt1.genSalt(12);
       const key = await randomString.generate(20);
-      const srect = await bcrypt.hash(key, salt1);
+      const srect = await bcrypt1.hash(key, salt1);
       console.log(srect);
 
       const username = req.body.username.toLowerCase();
@@ -77,8 +76,8 @@ class AuthController {
       if (user.length > 0)
         return response.ErrorResponse(res, "Tai khoan da ton tai!");
 
-      const salt = await bcrypt.genSalt(12);
-      const hashPassword = await bcrypt.hash(password, salt);
+      const salt = await bcrypt1.genSalt(12);
+      const hashPassword = await bcrypt1.hash(password, salt);
       const keyApi = await randomString.generate(20);
 
       const userCre = await UserModel.create({
