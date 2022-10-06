@@ -25,18 +25,6 @@ class AuthController {
             if (!isPasswordValid) {
                 return response.ErrorResponse(res, "Mat khau k chinh xac!");
             }
-            // const token = jwt.sign({id: data[0].id}, SECRET_KEY, {expiresIn: 60 * 60 * 24});
-            // const refreshToken = await randomString.generate(30);
-            // await UserModel.update(
-            //     {
-            //         refreshToken: refreshToken,
-            //     },
-            //     {
-            //         where: {
-            //             id: data[0].id,
-            //         },
-            //     }
-            // );
 
             let user = {
                 id: data[0].id,
@@ -73,7 +61,7 @@ class AuthController {
             if (user.length > 0)
                 return response.ErrorResponse(res, "Tai khoan da ton tai!");
 
-            // const salt = await bcrypt.genSalt(12);
+            const salt = await bcrypt.genSalt(12);
             const hashPassword = await bcrypt.hash(password, salt);
             const keyApi = await randomString.generate(20);
             const refreshToken = await randomString.generate(30);

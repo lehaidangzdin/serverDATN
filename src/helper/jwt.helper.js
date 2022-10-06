@@ -1,6 +1,4 @@
 const jwt = require('jsonwebtoken')
-const response = require("../helper/response")
-
 
 exports.signToken = (id, secretSignature) => {
     try {
@@ -8,9 +6,11 @@ exports.signToken = (id, secretSignature) => {
                 iss: "admin",
                 sub: id,
                 iat: new Date().getTime(),
-                exp: new Date().setDate(new Date().getDate() + 3)
+                // exp: new Date().setDate(new Date().getDate())
             },
-            secretSignature);
+            secretSignature,
+            {expiresIn: 0}
+        );
     } catch (error) {
         console.log(`Error in generate access token:  + ${error}`);
         return null;
