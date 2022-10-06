@@ -42,7 +42,7 @@ class AuthController {
                 id: data[0].id,
                 username: data[0].userName,
                 keyApi: data[0].keyApi,
-                refreshToken: refreshToken,
+                refreshToken: data[0].refreshToken,
             };
             return response.successResponseWithData(res, "Success", user);
         } catch (e) {
@@ -76,7 +76,6 @@ class AuthController {
             // const salt = await bcrypt.genSalt(12);
             const hashPassword = await bcrypt.hash(password, salt);
             const keyApi = await randomString.generate(20);
-
             const refreshToken = await randomString.generate(30);
 
             const userCre = await UserModel.create({

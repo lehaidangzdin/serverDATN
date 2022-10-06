@@ -18,10 +18,6 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             allowNull: false,
         },
-        token: {
-            type: Sequelize.STRING,
-            allowNull: true,
-        },
         refreshToken: {
             type: Sequelize.STRING,
             allowNull: true,
