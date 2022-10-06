@@ -1,13 +1,31 @@
-const jwt = require('jsonwebtoken');
-const promisify = require('util').promisify;
+const jwt = require('jsonwebtoken')
+const response = require("../helper/response")
 
 
-exports.signToken = async (id, secretSignature) => {
+exports.signToken = (id, secretSignature) => {
     try {
-        const newToken = await jwt.sign({id: id}, secretSignature, {expiresIn: 60 });
-        return newToken;
+        return jwt.sign({
+                iss: "admin",
+                sub: id,
+                iat: new Date().getTime(),
+                exp: new Date().setDate(new Date().getDate() + 3)
+            },
+            secretSignature);
     } catch (error) {
         console.log(`Error in generate access token:  + ${error}`);
         return null;
     }
 };
+
+// exports.verifyToken = (token, secretKey) => {
+//     try {
+//         jwt.verify(token, secretKey, function (err) {
+//             if (err) {
+//                 return err;
+//             }
+//         })
+//     } catch (error) {
+//         console.log(`Error in generate access token:  + ${error}`);
+//         return null;
+//     }
+// };

@@ -7,7 +7,7 @@
     "dev": "nodemon"
   },
   "dependencies": {
-    "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
     "cloudinary": "^1.32.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
