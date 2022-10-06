@@ -26,25 +26,22 @@ class AuthController {
                 return response.ErrorResponse(res, "Mat khau k chinh xac!");
             }
             // const token = jwt.sign({id: data[0].id}, SECRET_KEY, {expiresIn: 60 * 60 * 24});
-            const token = await jwtHelper.signToken(data[0].id, SECRET_KEY);
-            const refreshToken = await randomString.generate(30);
-            await UserModel.update(
-                {
-                    token: token,
-                    refreshToken: refreshToken,
-                },
-                {
-                    where: {
-                        id: data[0].id,
-                    },
-                }
-            );
+            // const refreshToken = await randomString.generate(30);
+            // await UserModel.update(
+            //     {
+            //         refreshToken: refreshToken,
+            //     },
+            //     {
+            //         where: {
+            //             id: data[0].id,
+            //         },
+            //     }
+            // );
 
             let user = {
                 id: data[0].id,
                 username: data[0].userName,
                 keyApi: data[0].keyApi,
-                token: token,
                 refreshToken: refreshToken,
             };
             return response.successResponseWithData(res, "Success", user);
@@ -76,15 +73,17 @@ class AuthController {
             if (user.length > 0)
                 return response.ErrorResponse(res, "Tai khoan da ton tai!");
 
-            const salt = await bcrypt.genSalt(12);
+            // const salt = await bcrypt.genSalt(12);
             const hashPassword = await bcrypt.hash(password, salt);
             const keyApi = await randomString.generate(20);
+
+            const refreshToken = await randomString.generate(30);
 
             const userCre = await UserModel.create({
                 userName: username,
                 password: hashPassword,
-                salt: salt,
                 keyApi: keyApi,
+                refreshToken: refreshToken,
             });
 
             if (userCre) {
