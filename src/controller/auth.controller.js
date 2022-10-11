@@ -5,9 +5,16 @@ const response = require("../helper/response");
 const bcrypt = require("bcryptjs");
 const jwtHelper = require("../helper/jwt.helper");
 
+const {validateLogin, validateRegister} = require("../helper/validator")
+
 class AuthController {
     async login(req, res) {
         try {
+            const err = validateLogin.validate(req.body);
+            if (err) {
+                console.log(err)
+                return response.validationErrorWithData(res, err.error.details[0].message,)
+            }
             const username = req.body.username.toLowerCase() || "test";
             const password = req.body.password || "12345";
 
@@ -45,7 +52,7 @@ class AuthController {
             const salt1 = await bcrypt.genSalt(12);
             const key = await randomString.generate(20);
             const srect = await bcrypt.hash(key, salt1);
-            console.log(srect);
+            // console.log(srect);
 
             const username = req.body.username.toLowerCase();
             const password = req.body.password.toLowerCase();

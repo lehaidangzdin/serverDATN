@@ -3,6 +3,7 @@ const multer = require("multer");
 const upload = require("../middleware/fileUpload").single("image");
 const cloudinary = require("../middleware/cloudinarySetUp");
 const response = require("../helper/response")
+const pagination = require("../helper/paginationHelper")
 
 
 class BookController {
@@ -46,13 +47,30 @@ class BookController {
     }
 
     async getAllBook(req, res, next) {
+        const {page, size} = req.query;
+
+        if (page <= 0) {
+            return response.ErrorResponse(res, "Num page start from 1")
+        }
+        const {limit, offset} = pagination.getPagination(page, size);
+        // console.log(page, size)
+
         try {
-            const data = await Book.findAll();
-            res.send(data);
+            const data = await Book.findAll(
+                {
+                    limit,
+                    offset
+                }
+            );
+            const countItem = await Book.findAndCountAll();
+            if (data && countItem) {
+                response.successResponsePaginationWithData(res, "Success", page, Math.ceil(countItem.count / size), data)
+            }
         } catch (error) {
             console.log(error);
         }
     }
+
 
     async uploadBook(req, res, next) {
         try {

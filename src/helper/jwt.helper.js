@@ -6,11 +6,9 @@ exports.signToken = (id, secretSignature) => {
                 iss: "admin",
                 sub: id,
                 iat: new Date().getTime(),
-                // exp: new Date().setDate(new Date().getDate())
+                exp: new Date().setDate(new Date().getDate() + 3)
             },
-            secretSignature,
-            {expiresIn: 0}
-        );
+            secretSignature);
     } catch (error) {
         console.log(`Error in generate access token:  + ${error}`);
         return null;
